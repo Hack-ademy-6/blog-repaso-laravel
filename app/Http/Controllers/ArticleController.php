@@ -15,6 +15,12 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::all();
+
+        $articles->map(function($article, $key){
+            $article->body = substr($article->body,0,200);
+            return $article;
+        });
+
         return view('home',compact('articles'));
     }
 
@@ -38,7 +44,7 @@ class ArticleController extends Controller
     {
         $misdatos = $request->validate([
             'title'=>'required|min:3|max:255',
-            'body'=>'required|min:10|max:500'
+            'body'=>'required|min:10|max:1000'
         ]);
 
         Article::create($misdatos); 
@@ -54,7 +60,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        
+        return view('showArticle',compact('article'));
     }
 
     /**

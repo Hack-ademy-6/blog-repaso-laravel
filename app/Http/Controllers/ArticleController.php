@@ -25,7 +25,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        return view('storeArticle');
     }
 
     /**
@@ -36,7 +36,14 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $misdatos = $request->validate([
+            'title'=>'required|min:3|max:255',
+            'body'=>'required|min:10|max:500'
+        ]);
+
+        Article::create($misdatos); 
+        
+        return redirect()->route('home')->withMessage('Articulo creado con exito');
     }
 
     /**

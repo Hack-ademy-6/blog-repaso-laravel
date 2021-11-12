@@ -16,7 +16,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::with('user')->paginate(6);
+        $articles = Article::with('user')->latest()->paginate(6);
 
         $articles->map(function($article, $key){
             $article->body = substr($article->body,0,200);
@@ -126,7 +126,7 @@ class ArticleController extends Controller
 
         $article->update($misdatos);
         $article->tags()->sync($misdatos['tags']);
-        
+
         return redirect()->route('articles.edit',$article->id)->withMessage('Articulo modificado con exito');
 
     }

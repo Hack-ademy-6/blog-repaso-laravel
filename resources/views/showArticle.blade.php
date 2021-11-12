@@ -5,13 +5,12 @@
         <img src="https://picsum.photos/2000/400" alt="" class="img-fluid">
     </div>
     <div class="col-12">
-        <h1>{{$article->title}}</h1>
         @foreach ($article->tags as $tag)
             <a href="">#{{$tag->name}}</a>
         @endforeach
         <div>Creado el: {{$article->created_at}}</div>
         <div>Autor: {{$article->user->name}}</div>
-        <p>{{$article->body}}</p>
+        <p>{!!$article->body!!}</p>
         @auth
             @if(auth()->id() == $article->user_id)
                 <a href="{{route('articles.edit',$article->id)}}" class="btn btn-warning">Editar</a>

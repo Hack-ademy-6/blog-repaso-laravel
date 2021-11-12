@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
@@ -41,13 +42,19 @@ class ArticleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        if(!$user = Auth::user()){
+            return redirect()->route('articles.create')->withMessage('No estás autentificado');
+        }
+        
         $misdatos = $request->validate([
             'title'=>'required|min:3|max:255',
             'body'=>'required|min:10|max:1000'
         ]);
 
-        Article::create($misdatos); 
+        // Article::create($misdatos); 
+
+        $user->articles()->create($misdatos);
         
         return redirect()->route('home')->withMessage('Articulo creado con exito');
     }

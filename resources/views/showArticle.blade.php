@@ -6,7 +6,8 @@
     </div>
     <div class="col-12">
         <h1>{{$article->title}}</h1>
-        <small>Creado el: {{$article->created_at}}</small>
+        <div>Creado el: {{$article->created_at}}</div>
+        <div>Autor: {{$article->user->name}}</div>
         <p>{{$article->body}}</p>
     </div>
 </div>

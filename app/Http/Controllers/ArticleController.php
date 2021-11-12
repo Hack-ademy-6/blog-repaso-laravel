@@ -46,7 +46,7 @@ class ArticleController extends Controller
         if(!$user = Auth::user()){
             return redirect()->route('articles.create')->withMessage('No estás autentificado');
         }
-        
+
         $misdatos = $request->validate([
             'title'=>'required|min:3|max:255',
             'body'=>'required|min:10|max:1000'
@@ -78,7 +78,15 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        if(!$user = Auth::user()){
+            return redirect()->route('articles.show',$article->id)->withMessage('No estás autentificado para editar');
+        }
+
+        if($user->id != $article->user_id){
+            return redirect()->route('articles.show',$article->id)->withMessage('No estás autorizado a editar');
+        }
+
+        return view('editArticle',compact('article'));
     }
 
     /**
@@ -90,7 +98,26 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        if(!$user = Auth::user()){
+            return redirect()->route('articles.show',$article->id)->withMessage('No estás autentificado para editar');
+        }
+
+        if($user->id != $article->user_id){
+            return redirect()->route('articles.show',$article->id)->withMessage('No estás autorizado a editar');
+        }
+
+        $misdatos = $request->validate([
+            'title'=>'required|min:3|max:255',
+            'body'=>'required|min:10|max:1000'
+        ]);
+
+        // $article->title = $misdatos['title'];
+        // $article->body = $misdatos['body'];
+        // $article->save();
+
+        $article->update($misdatos);
+        return redirect()->route('articles.edit',$article->id)->withMessage('Articulo modificado con exito');
+
     }
 
     /**
@@ -101,6 +128,17 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        if(!$user = Auth::user()){
+            return redirect()->route('articles.show',$article->id)->withMessage('No estás autentificado para editar');
+        }
+
+        if($user->id != $article->user_id){
+            return redirect()->route('articles.show',$article->id)->withMessage('No estás autorizado a editar');
+        }
+
+        $article->delete();
+
+        return redirect()->route('home')->withMessage('Articulo eliminado con exito');
+
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Models\User;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,8 +34,7 @@ class ArticleController extends Controller
      */
     public function create()
     {   
-        $tags = Tag::all();
-        return view('storeArticle',compact('tags'));
+        return view('storeArticle');
     }
 
     /**
@@ -92,9 +92,7 @@ class ArticleController extends Controller
             return redirect()->route('articles.show',$article->id)->withMessage('No estás autorizado a editar');
         }
 
-        $tags = Tag::all();
-
-        return view('editArticle',compact('article','tags'));
+        return view('editArticle',compact('article'));
     }
 
     /**
@@ -151,5 +149,17 @@ class ArticleController extends Controller
 
         return redirect()->route('home')->withMessage('Articulo eliminado con exito');
 
+    }
+
+    public function byTag(Tag $tag)
+    {
+        $articles = $tag->articles()->paginate(6);
+        return view('home',compact('articles'));
+    }
+
+    public function byUser(User $user)
+    {
+        $articles = $user->articles()->paginate(6);
+        return view('home',compact('articles'));
     }
 }

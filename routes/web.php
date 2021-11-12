@@ -20,4 +20,6 @@ Route::get('/', [ArticleController::class,'index'])->name('home');
 // Route::get("/articles",[ArticleController::class,'index'])->name('articles.index');
 
 Route::resource('articles', ArticleController::class);
+Route::get('articles/{tag}/tag',[ArticleController::class,'byTag'])->name('articles.byTag');
+Route::get('articles/{user}/author',[ArticleController::class,'byUser'])->name('articles.byUser');
 

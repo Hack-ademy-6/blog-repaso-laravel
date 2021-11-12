@@ -16,8 +16,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(10)->hasArticles(3)->create();
-        Tag::factory(20)->create();
+        $tags = Tag::factory()->count(10)->create();
+
+        User::factory(10)->has(Article::factory()->count(3)->hasTags(2))->create();
         
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Tag;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        try {
+            View::share('tags',Tag::all());
+        } catch (\Throwable $th) {
+            dump("Si estás haciendo el clone de este proyecto crea el DB y lanza las migrations");
+        }
         Paginator::useBootstrap();
     }
 }

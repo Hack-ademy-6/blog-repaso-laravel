@@ -6,7 +6,7 @@
     </div>
     <div class="col-12">
         @foreach ($article->tags as $tag)
-            <a href="">#{{$tag->name}}</a>
+            <a href="{{route('articles.byTag',$tag->id)}}">#{{$tag->name}}</a>
         @endforeach
         <div>Creado el: {{$article->created_at}}</div>
         <div>Autor: {{$article->user->name}}</div>

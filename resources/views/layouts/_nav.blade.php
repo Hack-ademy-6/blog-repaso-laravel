@@ -14,6 +14,16 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Tags
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              @foreach ($tags as $tag)
+                <li><a class="dropdown-item" href="{{route('articles.byTag',$tag->id)}}">{{$tag->name}}</a></li>
+              @endforeach
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               {{auth()->user()->name ?? 'Usuario'}}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -23,6 +33,7 @@
             @endguest
 
             @auth
+            <li><a class="dropdown-item" href="{{route('articles.byUser',auth()->id())}}" id="logout_link">Mis Articulos</a></li>
             <li><a class="dropdown-item" href="#" id="logout_link">Logout</a></li>
             <form action="{{route('logout')}}" method="POST" id="logout_form">
                 @csrf

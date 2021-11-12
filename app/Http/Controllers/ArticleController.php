@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,8 +32,9 @@ class ArticleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('storeArticle');
+    {   
+        $tags = Tag::all();
+        return view('storeArticle',compact('tags'));
     }
 
     /**
@@ -43,18 +45,22 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {   
+        
         if(!$user = Auth::user()){
             return redirect()->route('articles.create')->withMessage('No estás autentificado');
         }
 
         $misdatos = $request->validate([
             'title'=>'required|min:3|max:255',
-            'body'=>'required|min:10|max:1000'
+            'body'=>'required|min:10|max:1000',
+            'tags'=>'required'
         ]);
 
         // Article::create($misdatos); 
 
-        $user->articles()->create($misdatos);
+        $article = $user->articles()->create($misdatos);
+
+        $article->tags()->sync($misdatos['tags']);
         
         return redirect()->route('home')->withMessage('Articulo creado con exito');
     }
@@ -86,7 +92,9 @@ class ArticleController extends Controller
             return redirect()->route('articles.show',$article->id)->withMessage('No estás autorizado a editar');
         }
 
-        return view('editArticle',compact('article'));
+        $tags = Tag::all();
+
+        return view('editArticle',compact('article','tags'));
     }
 
     /**
@@ -108,7 +116,8 @@ class ArticleController extends Controller
 
         $misdatos = $request->validate([
             'title'=>'required|min:3|max:255',
-            'body'=>'required|min:10|max:1000'
+            'body'=>'required|min:10|max:1000',
+            'tags'=>'required'
         ]);
 
         // $article->title = $misdatos['title'];
@@ -116,6 +125,8 @@ class ArticleController extends Controller
         // $article->save();
 
         $article->update($misdatos);
+        $article->tags()->sync($misdatos['tags']);
+        
         return redirect()->route('articles.edit',$article->id)->withMessage('Articulo modificado con exito');
 
     }

@@ -18,6 +18,14 @@
               <label for="exampleInputPassword1" class="form-label">Texto</label>
               <textarea name="body" id="" cols="30" rows="10" class="form-control"></textarea>
             </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Tags</label>
+              <select class="form-select" multiple aria-label="multiple select example" name="tags[]">
+                @foreach ($tags as $tag)
+                <option value="{{$tag->id}}">{{$tag->name}}</option>
+                @endforeach
+              </select>
+            </div>
             <button type="submit" class="btn btn-primary">Crear</button>
           </form>
     </div>

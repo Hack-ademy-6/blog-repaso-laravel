@@ -15,7 +15,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::with('user')->paginate(2);
+        $articles = Article::with('user')->paginate(6);
 
         $articles->map(function($article, $key){
             $article->body = substr($article->body,0,200);

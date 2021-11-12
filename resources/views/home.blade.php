@@ -22,6 +22,7 @@
             <h2>No hay ningun articulo</h2>
             <a href="{{route('articles.create')}}" class="btn btn-info">Crear articulo</a>
         @endforelse
+        {{ $articles->links() }}
     </div>
 </div>
     
